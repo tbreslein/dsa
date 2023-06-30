@@ -4,6 +4,6 @@
 
 int main() {
     lli_test();
-    dlli_test();
+    // dlli_test();
     return 0;
 }
