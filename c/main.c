@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 int main() {
-  linked_list_int foo;
-  printf("Hello world from C");
+  lli_test();
   return 0;
 }
