@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const size_t BUFSIZE = 1024;
+#pragma once
 
 typedef struct LinkedListInt {
     int data;
@@ -107,6 +107,7 @@ int lli_peek_at(linked_list_int **l, size_t idx) {
 }
 
 void lli_test() {
+    printf("Running LinkedList tests!\n");
     int foo;
     // creation
     linked_list_int *l = lli_new(1);
@@ -185,4 +186,5 @@ void lli_test() {
     lli_print(&l);
 
     lli_free(l);
+    printf("Finished LinkedList tests!\n\n");
 }

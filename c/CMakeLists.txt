@@ -17,7 +17,7 @@ endif()
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-add_executable(main main.c linkedlist.h)
+add_executable(main main.c linkedlist.h doublelinkedlist.h)
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(main INTERFACE
