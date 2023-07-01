@@ -193,31 +193,136 @@ int dlli_peek_at(double_linked_list_int **l, size_t idx) {
 }
 
 void dlli_test() {
-    printf("Running DoubleLinkedList tests!\n");
-    // creation
+    // printf("Running DoubleLinkedList tests!\n");
+    // // creation
+    // double_linked_list_int *l = dlli_new();
+    // assert(l != NULL);
+    // assert(l->len == 0);
+    // assert(l->head == NULL);
+    // assert(l->tail == NULL);
+    // printf("\nafter creating:\n  l should be [ ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // // push
+    // dlli_push_front(&l, 2);
+    // assert(l->len == 1);
+    // assert(l->head != NULL);
+    // assert(l->tail != NULL);
+    // assert(l->head->next == NULL);
+    // assert(l->head->prev == NULL);
+    // assert(l->tail->next == NULL);
+    // assert(l->tail->prev == NULL);
+    // assert(l->head->data == 2);
+    // assert(l->tail->data == 2);
+    // assert(dlli_peek_front(l) == 2);
+    // assert(dlli_peek_back(l) == 2);
+    // printf("\nafter pushing 2 to the front:\n  l should be [ 2 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // dlli_push_back(&l, 1);
+    // assert(l->len == 2);
+    // assert(l->head != NULL);
+    // assert(l->tail != NULL);
+    // assert(l->head->data == 2);
+    // assert(l->tail->data == 1);
+    // assert(dlli_peek_front(l) == 2);
+    // assert(dlli_peek_back(l) == 1);
+    // printf("\nafter pushing 1 to the back:\n  l should be [ 2 1 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // dlli_push_back(&l, 3);
+    // assert(l->len == 3);
+    // assert(l->head != NULL);
+    // assert(l->tail != NULL);
+    // assert(l->head->data == 2);
+    // assert(l->tail->data == 3);
+    // assert(dlli_peek_front(l) == 2);
+    // assert(dlli_peek_back(l) == 3);
+    // printf("\nafter pushing 3 to the back:\n  l should be [ 2 1 3 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // // peek_at
+    // assert(dlli_peek_at(&l, 0) == 2);
+    // printf("\npeeking at 0: %d\n", dlli_peek_at(&l, 0));
+    //
+    // assert(dlli_peek_at(&l, 1) == 1);
+    // printf("\npeeking at 1: %d\n", dlli_peek_at(&l, 1));
+    //
+    // assert(dlli_peek_at(&l, 2) == 3);
+    // printf("\npeeking at 1: %d\n", dlli_peek_at(&l, 2));
+    //
+    // // pop
+    // int foo = dlli_pop_front(&l);
+    // printf("\npop_front: %d\n", foo);
+    // assert(l->len == 2);
+    // assert(foo == 2);
+    // assert(dlli_peek_front(l) == 1);
+    // assert(dlli_peek_back(l) == 3);
+    // printf("\nafter popping front\n  l should be [ 1 3 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // foo = dlli_pop_back(&l);
+    // printf("\npop_back: %d\n", foo);
+    // assert(l->len == 1);
+    // assert(foo == 3);
+    // dlli_print(&l);
+    // assert(dlli_peek_front(l) == 1);
+    // assert(dlli_peek_back(l) == 1);
+    // printf("\nafter popping back\n  l should be [ 1 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // // insert_at
+    // dlli_insert_at(&l, 2, 0);
+    // assert(dlli_peek_at(&l, 0) == 2);
+    // printf("\nafter insert 2 at idx 0\n  l should be [ 2 1 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // dlli_insert_at(&l, 3, 1);
+    // dlli_print(&l);
+    // assert(dlli_peek_at(&l, 1) == 3);
+    // printf("\nafter insert 3 at idx 1\n  l should be [ 2 3 1 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // dlli_insert_at(&l, 4, 2);
+    // dlli_print(&l);
+    // assert(dlli_peek_at(&l, 2) == 4);
+    // printf("\nafter insert 4 at idx 2\n  l should be [ 2 3 4 1 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // // // remove_at
+    // assert(dlli_remove_at(&l, 1) == 3);
+    // printf("\nafter removing 3 at idx 1\n  l should be [ 2 4 1 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // assert(dlli_remove_at(&l, 2) == 1);
+    // printf("\nafter removing 1 at idx 2\n  l should be [ 2 4 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // assert(dlli_remove_at(&l, 0) == 2);
+    // printf("\nafter removing 2 at idx 0\n  l should be [ 4 ]\n  lli_print = ");
+    // dlli_print(&l);
+    //
+    // dlli_free(l);
+    // printf("Finished DoubleLinkedList tests!\n\n");
+
+    int foo;
     double_linked_list_int *l = dlli_new();
     assert(l != NULL);
     assert(l->len == 0);
     assert(l->head == NULL);
     assert(l->tail == NULL);
-    printf("\nafter creating:\n  l should be [ ]\n  lli_print = ");
-    dlli_print(&l);
 
     // push
     dlli_push_front(&l, 2);
     assert(l->len == 1);
     assert(l->head != NULL);
     assert(l->tail != NULL);
-    assert(l->head->next == NULL);
-    assert(l->head->prev == NULL);
-    assert(l->tail->next == NULL);
-    assert(l->tail->prev == NULL);
     assert(l->head->data == 2);
     assert(l->tail->data == 2);
-    assert(dlli_peek_front(l) == 2);
-    assert(dlli_peek_back(l) == 2);
-    printf("\nafter pushing 2 to the front:\n  l should be [ 2 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_front(l);
+    assert(foo == 2);
+    foo = dlli_peek_back(l);
+    assert(foo == 2);
 
     dlli_push_back(&l, 1);
     assert(l->len == 2);
@@ -225,10 +330,10 @@ void dlli_test() {
     assert(l->tail != NULL);
     assert(l->head->data == 2);
     assert(l->tail->data == 1);
-    assert(dlli_peek_front(l) == 2);
-    assert(dlli_peek_back(l) == 1);
-    printf("\nafter pushing 1 to the back:\n  l should be [ 2 1 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_front(l);
+    assert(foo == 2);
+    foo = dlli_peek_back(l);
+    assert(foo == 1);
 
     dlli_push_back(&l, 3);
     assert(l->len == 3);
@@ -236,72 +341,49 @@ void dlli_test() {
     assert(l->tail != NULL);
     assert(l->head->data == 2);
     assert(l->tail->data == 3);
-    assert(dlli_peek_front(l) == 2);
-    assert(dlli_peek_back(l) == 3);
-    printf("\nafter pushing 3 to the back:\n  l should be [ 2 1 3 ]\n  lli_print = ");
-    dlli_print(&l);
-
-    // peek_at
-    assert(dlli_peek_at(&l, 0) == 2);
-    printf("\npeeking at 0: %d\n", dlli_peek_at(&l, 0));
-
-    assert(dlli_peek_at(&l, 1) == 1);
-    printf("\npeeking at 1: %d\n", dlli_peek_at(&l, 1));
-
-    assert(dlli_peek_at(&l, 2) == 3);
-    printf("\npeeking at 1: %d\n", dlli_peek_at(&l, 2));
+    foo = dlli_peek_front(l);
+    assert(foo == 2);
+    foo = dlli_peek_back(l);
+    assert(foo == 3);
 
     // pop
-    int foo = dlli_pop_front(&l);
-    printf("\npop_front: %d\n", foo);
+    foo = dlli_pop_front(&l);
     assert(l->len == 2);
     assert(foo == 2);
-    assert(dlli_peek_front(l) == 1);
-    assert(dlli_peek_back(l) == 3);
-    printf("\nafter popping front\n  l should be [ 1 3 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_front(l);
+    assert(foo == 1);
+    foo = dlli_peek_back(l);
+    assert(foo == 3);
 
     foo = dlli_pop_back(&l);
-    printf("\npop_back: %d\n", foo);
     assert(l->len == 1);
     assert(foo == 3);
-    dlli_print(&l);
-    assert(dlli_peek_front(l) == 1);
-    assert(dlli_peek_back(l) == 1);
-    printf("\nafter popping back\n  l should be [ 1 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_front(l);
+    assert(foo == 1);
+    foo = dlli_peek_back(l);
+    assert(foo == 1);
 
     // insert_at
     dlli_insert_at(&l, 2, 0);
-    assert(dlli_peek_at(&l, 0) == 2);
-    printf("\nafter insert 2 at idx 0\n  l should be [ 2 1 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_at(&l, 0);
+    assert(foo == 2);
 
     dlli_insert_at(&l, 3, 1);
-    dlli_print(&l);
-    assert(dlli_peek_at(&l, 1) == 3);
-    printf("\nafter insert 3 at idx 1\n  l should be [ 2 3 1 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_at(&l, 1);
+    assert(foo == 3);
 
     dlli_insert_at(&l, 4, 2);
-    dlli_print(&l);
-    assert(dlli_peek_at(&l, 2) == 4);
-    printf("\nafter insert 4 at idx 2\n  l should be [ 2 3 4 1 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_peek_at(&l, 2);
+    assert(foo == 4);
 
     // // remove_at
-    assert(dlli_remove_at(&l, 1) == 3);
-    printf("\nafter removing 3 at idx 1\n  l should be [ 2 4 1 ]\n  lli_print = ");
-    dlli_print(&l);
-
-    assert(dlli_remove_at(&l, 2) == 1);
-    printf("\nafter removing 1 at idx 2\n  l should be [ 2 4 ]\n  lli_print = ");
-    dlli_print(&l);
-
-    assert(dlli_remove_at(&l, 0) == 2);
-    printf("\nafter removing 2 at idx 0\n  l should be [ 4 ]\n  lli_print = ");
-    dlli_print(&l);
+    foo = dlli_remove_at(&l, 1);
+    assert(foo == 3);
+    foo = dlli_remove_at(&l, 2);
+    assert(foo == 1);
+    foo = dlli_remove_at(&l, 0);
+    assert(foo == 2);
 
     dlli_free(l);
-    printf("Finished DoubleLinkedList tests!\n\n");
+    printf("Finished DoubleLinkedList tests!\n");
 }

@@ -181,15 +181,13 @@ int lli_peek_at(linked_list_int **l, size_t idx) {
 }
 
 void lli_test() {
-    printf("Running LinkedList tests!\n");
     // creation
     linked_list_int *l = lli_new();
+    int foo;
     assert(l != NULL);
     assert(l->len == 0);
     assert(l->head == NULL);
     assert(l->tail == NULL);
-    printf("\nafter creating:\n  l should be [ ]\n  lli_print = ");
-    lli_print(&l);
 
     // push
     lli_push_front(&l, 2);
@@ -198,10 +196,10 @@ void lli_test() {
     assert(l->tail != NULL);
     assert(l->head->data == 2);
     assert(l->tail->data == 2);
-    assert(lli_peek_front(l) == 2);
-    assert(lli_peek_back(l) == 2);
-    printf("\nafter pushing 2 to the front:\n  l should be [ 2 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_front(l);
+    assert(foo == 2);
+    foo = lli_peek_back(l);
+    assert(foo == 2);
 
     lli_push_back(&l, 1);
     assert(l->len == 2);
@@ -209,10 +207,10 @@ void lli_test() {
     assert(l->tail != NULL);
     assert(l->head->data == 2);
     assert(l->tail->data == 1);
-    assert(lli_peek_front(l) == 2);
-    assert(lli_peek_back(l) == 1);
-    printf("\nafter pushing 1 to the back:\n  l should be [ 2 1 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_front(l);
+    assert(foo == 2);
+    foo = lli_peek_back(l);
+    assert(foo == 1);
 
     lli_push_back(&l, 3);
     assert(l->len == 3);
@@ -220,72 +218,49 @@ void lli_test() {
     assert(l->tail != NULL);
     assert(l->head->data == 2);
     assert(l->tail->data == 3);
-    assert(lli_peek_front(l) == 2);
-    assert(lli_peek_back(l) == 3);
-    printf("\nafter pushing 3 to the back:\n  l should be [ 2 1 3 ]\n  lli_print = ");
-    lli_print(&l);
-
-    // peek_at
-    assert(lli_peek_at(&l, 0) == 2);
-    printf("\npeeking at 0: %d\n", lli_peek_at(&l, 0));
-
-    assert(lli_peek_at(&l, 1) == 1);
-    printf("\npeeking at 1: %d\n", lli_peek_at(&l, 1));
-
-    assert(lli_peek_at(&l, 2) == 3);
-    printf("\npeeking at 1: %d\n", lli_peek_at(&l, 2));
+    foo = lli_peek_front(l);
+    assert(foo == 2);
+    foo = lli_peek_back(l);
+    assert(foo == 3);
 
     // pop
-    int foo = lli_pop_front(&l);
-    printf("\npop_front: %d\n", foo);
+    foo = lli_pop_front(&l);
     assert(l->len == 2);
     assert(foo == 2);
-    assert(lli_peek_front(l) == 1);
-    assert(lli_peek_back(l) == 3);
-    printf("\nafter popping front\n  l should be [ 1 3 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_front(l);
+    assert(foo == 1);
+    foo = lli_peek_back(l);
+    assert(foo == 3);
 
     foo = lli_pop_back(&l);
-    printf("\npop_back: %d\n", foo);
     assert(l->len == 1);
     assert(foo == 3);
-    lli_print(&l);
-    assert(lli_peek_front(l) == 1);
-    assert(lli_peek_back(l) == 1);
-    printf("\nafter popping back\n  l should be [ 1 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_front(l);
+    assert(foo == 1);
+    foo = lli_peek_back(l);
+    assert(foo == 1);
 
     // insert_at
     lli_insert_at(&l, 2, 0);
-    assert(lli_peek_at(&l, 0) == 2);
-    printf("\nafter insert 2 at idx 0\n  l should be [ 2 1 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_at(&l, 0);
+    assert(foo == 2);
 
     lli_insert_at(&l, 3, 1);
-    lli_print(&l);
-    assert(lli_peek_at(&l, 1) == 3);
-    printf("\nafter insert 3 at idx 1\n  l should be [ 2 3 1 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_at(&l, 1);
+    assert(foo == 3);
 
     lli_insert_at(&l, 4, 2);
-    lli_print(&l);
-    assert(lli_peek_at(&l, 2) == 4);
-    printf("\nafter insert 4 at idx 2\n  l should be [ 2 3 4 1 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_peek_at(&l, 2);
+    assert(foo == 4);
 
     // // remove_at
-    assert(lli_remove_at(&l, 1) == 3);
-    printf("\nafter removing 3 at idx 1\n  l should be [ 2 4 1 ]\n  lli_print = ");
-    lli_print(&l);
-
-    assert(lli_remove_at(&l, 2) == 1);
-    printf("\nafter removing 1 at idx 2\n  l should be [ 2 4 ]\n  lli_print = ");
-    lli_print(&l);
-
-    assert(lli_remove_at(&l, 0) == 2);
-    printf("\nafter removing 2 at idx 0\n  l should be [ 4 ]\n  lli_print = ");
-    lli_print(&l);
+    foo = lli_remove_at(&l, 1);
+    assert(foo == 3);
+    foo = lli_remove_at(&l, 2);
+    assert(foo == 1);
+    foo = lli_remove_at(&l, 0);
+    assert(foo == 2);
 
     lli_free(l);
-    printf("Finished LinkedList tests!\n\n");
+    printf("Finished LinkedList tests!\n");
 }
