@@ -1,6 +1,7 @@
 #include "doublelinkedlist.h"
 #include "linkedlist.h"
 #include "queue.h"
+#include "stack.h"
 #include <stdio.h>
 
 int main() {
@@ -8,6 +9,7 @@ int main() {
     lli_test();
     dlli_test();
     qi_test();
+    si_test();
     printf("Finished all C tests!\n");
     return 0;
 }
