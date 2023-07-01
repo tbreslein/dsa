@@ -55,7 +55,7 @@ linked_list_int_node *lli_seek(linked_list_int **l, size_t idx) {
     assert(l != NULL);
     assert((*l)->head != NULL);
     linked_list_int_node *curr = (*l)->head;
-    for (size_t j = 0; j < idx && curr->next != NULL; j++, curr = curr->next)
+    for (size_t j = 0; j < idx && curr != NULL; j++, curr = curr->next)
         ;
     return curr;
 }
@@ -92,7 +92,7 @@ void lli_insert_at(linked_list_int **l, int data, size_t idx) {
         lli_push_front(l, data);
         return;
     }
-    if (idx == (*l)->len - 1) {
+    if (idx == (*l)->len) {
         lli_push_back(l, data);
         return;
     }
@@ -127,17 +127,12 @@ int lli_pop_back(linked_list_int **l) {
         (*l)->tail = NULL;
     } else {
         linked_list_int_node *prev = lli_seek(l, (*l)->len - 2);
+        prev->next = NULL;
         (*l)->tail = prev;
     }
     free(tail);
     (*l)->len--;
     return out;
-    // free((*l)->tail);
-    // (*l)->len--;
-    // if ((*l)->len == 0) {
-    //     (*l)->head = NULL;
-    // }
-    // (*l)->tail = prev;
 }
 
 int lli_remove_at(linked_list_int **l, size_t idx) {
@@ -258,44 +253,38 @@ void lli_test() {
     assert(lli_peek_front(l) == 1);
     assert(lli_peek_back(l) == 1);
     printf("\nafter popping back\n  l should be [ 1 ]\n  lli_print = ");
-    printf("foo\n");
     lli_print(&l);
-    printf("bar\n");
 
-    // // insert_at
-    // lli_insert_at(&l, 2, 0);
-    // foo = lli_peek_at(&l, 1);
-    // assert(foo == 1);
-    // printf("\nafter insert 2 at idx 0\n  l should be [ 2 1 ]\n  lli_print = ");
-    // lli_print(&l);
-    //
-    // lli_insert_at(&l, 3, 1);
-    // foo = lli_peek_at(&l, 1);
-    // assert(foo == 3);
-    // printf("\nafter insert 3 at idx 1\n  l should be [ 2 3 1 ]\n  lli_print = ");
-    // lli_print(&l);
-    //
-    // lli_insert_at(&l, 4, 2);
-    // foo = lli_peek_at(&l, 2);
-    // assert(foo == 4);
-    // printf("\nafter insert 4 at idx 2\n  l should be [ 2 3 4 1 ]\n  lli_print = ");
-    // lli_print(&l);
-    //
+    // insert_at
+    lli_insert_at(&l, 2, 0);
+    assert(lli_peek_at(&l, 0) == 2);
+    printf("\nafter insert 2 at idx 0\n  l should be [ 2 1 ]\n  lli_print = ");
+    lli_print(&l);
+
+    lli_insert_at(&l, 3, 1);
+    lli_print(&l);
+    assert(lli_peek_at(&l, 1) == 3);
+    printf("\nafter insert 3 at idx 1\n  l should be [ 2 3 1 ]\n  lli_print = ");
+    lli_print(&l);
+
+    lli_insert_at(&l, 4, 2);
+    lli_print(&l);
+    assert(lli_peek_at(&l, 2) == 4);
+    printf("\nafter insert 4 at idx 2\n  l should be [ 2 3 4 1 ]\n  lli_print = ");
+    lli_print(&l);
+
     // // remove_at
-    // foo = lli_remove_at(&l, 1);
-    // assert(foo == 3);
-    // printf("\nafter removing 3 at idx 1\n  l should be [ 2 4 1 ]\n  lli_print = ");
-    // lli_print(&l);
-    //
-    // foo = lli_remove_at(&l, 2);
-    // assert(foo == 1);
-    // printf("\nafter removing 1 at idx 2\n  l should be [ 2 4 ]\n  lli_print = ");
-    // lli_print(&l);
-    //
-    // foo = lli_remove_at(&l, 0);
-    // assert(foo == 2);
-    // printf("\nafter removing 2 at idx 0\n  l should be [ 4 ]\n  lli_print = ");
-    // lli_print(&l);
+    assert(lli_remove_at(&l, 1) == 3);
+    printf("\nafter removing 3 at idx 1\n  l should be [ 2 4 1 ]\n  lli_print = ");
+    lli_print(&l);
+
+    assert(lli_remove_at(&l, 2) == 1);
+    printf("\nafter removing 1 at idx 2\n  l should be [ 2 4 ]\n  lli_print = ");
+    lli_print(&l);
+
+    assert(lli_remove_at(&l, 0) == 2);
+    printf("\nafter removing 2 at idx 0\n  l should be [ 4 ]\n  lli_print = ");
+    lli_print(&l);
 
     lli_free(l);
     printf("Finished LinkedList tests!\n\n");
