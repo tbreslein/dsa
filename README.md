@@ -77,8 +77,8 @@ Language: C
   - [x] double linked list
   - [x] stack
   - [x] queue
-- [ ] array based data structures
-  - [ ] array buffer
+- [/] array based data structures
+  - [x] array buffer
   - [ ] ring buffer
   - [ ] heap
   - [ ] hashmap
@@ -116,14 +116,14 @@ Language: C
   - [ ] heap
   - [ ] hashmap
   - [ ] hashset
-- [ ] tree based data structures
+- [/] tree based data structures
   - [x] binary tree
   - [x] binary search tree
   - [ ] trie
   - [ ] graph
   - [ ] b-tree
   - [ ] red-black-tree
-- [ ] algos
+- [/] algos
   - [x] breadth first search
   - [x] depth first search
   - [x] inverting a binary tree

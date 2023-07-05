@@ -1,3 +1,4 @@
+#include "arraybuffer.h"
 #include "doublelinkedlist.h"
 #include "linkedlist.h"
 #include "queue.h"
@@ -10,6 +11,7 @@ int main() {
     dlli_test();
     qi_test();
     si_test();
+    abi_test();
     printf("Finished all C tests!\n");
     return 0;
 }
