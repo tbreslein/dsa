@@ -2,6 +2,7 @@
 #include "doublelinkedlist.h"
 #include "linkedlist.h"
 #include "queue.h"
+#include "ringbuffer.h"
 #include "stack.h"
 #include <stdio.h>
 
@@ -12,6 +13,7 @@ int main() {
     qi_test();
     si_test();
     abi_test();
+    rbi_test();
     printf("Finished all C tests!\n");
     return 0;
 }

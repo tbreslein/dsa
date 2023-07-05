@@ -34,53 +34,143 @@ void rbi_free(ring_buffer_int *r) {
 }
 
 void rbi_grow(ring_buffer_int *r) {
-    r->arr = (int *)realloc(r->arr, 2 * r->capacity * sizeof(int));
-    r->capacity *= 2;
-}
-
-void rbi_push(ring_buffer_int **r, int data) {
-    if ((*r)->len >= (*r)->capacity) {
-        rbi_grow(*r);
+    const size_t old_cap = r->capacity;
+    const size_t new_cap = 2 * old_cap;
+    r->arr = (int *)realloc(r->arr, new_cap * sizeof(int));
+    if (r->start > r->end) {
+        const size_t n_to_move = old_cap - r->start;
+        memmove(r->arr + new_cap - n_to_move, r->arr + r->start, n_to_move * sizeof(int));
     }
-    (*r)->arr[(*r)->len] = data;
-    (*r)->len++;
+    r->capacity = new_cap;
 }
 
-int rbi_pop(ring_buffer_int **r) {
-    (*r)->len--;
-    return (*r)->arr[(*r)->len];
+size_t rbi_idx(ring_buffer_int **r, size_t idx) {
+    assert(idx < (*r)->len);
+    return ((*r)->start + (*r)->end) % (*r)->capacity;
 }
 
 void rbi_set(ring_buffer_int **r, size_t idx, int data) {
     assert(idx < (*r)->len);
-    (*r)->arr[idx] = data;
+    (*r)->arr[rbi_idx(r, idx)] = data;
 }
 
 int rbi_get(ring_buffer_int **r, size_t idx) {
     assert(idx < (*r)->len);
-    return (*r)->arr[idx];
+    return (*r)->arr[rbi_idx(r, idx)];
+}
+
+void rbi_push_back(ring_buffer_int **r, int data) {
+    if ((*r)->len >= (*r)->capacity) {
+        rbi_grow(*r);
+    }
+    // TODO: this needs to be fixed
+    if ((*r)->len == 0) {
+        //
+    }
+    (*r)->arr[++(*r)->end] = data;
+    (*r)->len++;
+}
+
+void rbi_push_front(ring_buffer_int **r, int data) {
+    if ((*r)->len >= (*r)->capacity) {
+        rbi_grow(*r);
+    }
+    // TODO: this might not work correctly when len == 0, but start != 0
+    if ((*r)->start == 0) {
+        (*r)->start = (*r)->capacity - 1;
+        (*r)->arr[(*r)->start] = data;
+    } else {
+        (*r)->arr[--(*r)->start] = data;
+    }
+    (*r)->len++;
+}
+
+int rbi_pop_back(ring_buffer_int **r) {
+    int out = (*r)->arr[(*r)->end];
+    if ((*r)->end == 0) {
+        (*r)->end = (*r)->capacity - 1;
+    } else {
+        (*r)->end--;
+    }
+    (*r)->len--;
+    return out;
+}
+
+int rbi_pop_front(ring_buffer_int **r) {
+    int out = (*r)->arr[(*r)->start];
+    if ((*r)->start == 0) {
+        (*r)->start = (*r)->capacity - 1;
+    } else {
+        (*r)->start--;
+    }
+    (*r)->len--;
+    return out;
 }
 
 void rbi_insert(ring_buffer_int **r, size_t idx, int data) {
     assert(idx <= (*r)->len);
-    if (idx == (*r)->len) {
-        return rbi_push(r, data);
-    }
     if ((*r)->len >= (*r)->capacity) {
         rbi_grow(*r);
     }
-    memmove((*r)->arr + idx + 1, (*r)->arr + idx, (*r)->len - idx);
-    (*r)->arr[idx] = data;
+    if (idx == 0) {
+        return rbi_push_front(r, data);
+    }
+    if (idx == (*r)->len) {
+        return rbi_push_back(r, data);
+    }
+    const size_t real_idx = rbi_idx(r, idx);
+    if ((*r)->start > (*r)->end && real_idx > (*r)->start) {
+        // in this case, we need to wrap elements around the edge
+
+        // first: make room at the beginning of the buffer
+        memmove((*r)->arr + 1, (*r)->arr, ((*r)->end + 1) * sizeof(int));
+
+        // second: move the element at the end of the buffer over the edge
+        memcpy((*r)->arr, (*r)->arr + (*r)->capacity - 1, sizeof(int));
+
+        // third: move the remaining elements up
+        const size_t n_to_move = (*r)->capacity - real_idx - 1;
+        memmove((*r)->arr + real_idx + 1, (*r)->arr + real_idx, n_to_move * sizeof(int));
+    } else {
+        // in this case we just need to move a couple of elements near the
+        // beginning of the list up
+        const size_t n_to_move = (*r)->end - real_idx;
+        memmove((*r)->arr + real_idx + 1, (*r)->arr + real_idx, n_to_move * sizeof(int));
+    }
+    // either way, we can now safely set data into the correct slot
+    (*r)->arr[real_idx] = data;
+    (*r)->end = ((*r)->end + 1) % (*r)->capacity;
     (*r)->len++;
 }
 
 int rbi_remove(ring_buffer_int **r, size_t idx) {
     assert(idx < (*r)->len);
-    if (idx == (*r)->len - 1) {
-        return rbi_pop(r);
+    if (idx == 0) {
+        return rbi_pop_front(r);
+    } else if (idx == (*r)->len - 1) {
+        return rbi_pop_back(r);
     }
-    int out = (*r)->arr[idx];
-    memmove((*r)->arr + idx, (*r)->arr + idx + 1, (*r)->len - idx);
+    const size_t real_idx = rbi_idx(r, idx);
+    int out = (*r)->arr[real_idx];
+    if ((*r)->start > (*r)->end && real_idx > (*r)->start) {
+        // in this case, we need to wrap elements around the edge
+
+        // first: make room at the end of the buffer
+        const size_t n_to_move = (*r)->capacity - real_idx - 1;
+        memmove((*r)->arr + real_idx, (*r)->arr + real_idx + 1, n_to_move * sizeof(int));
+
+        // second: move the element at the beginning of the buffer over the edge
+        memcpy((*r)->arr + (*r)->capacity - 1, (*r)->arr, sizeof(int));
+
+        // third: move the remaining elements down
+        memmove((*r)->arr, (*r)->arr + 1, ((*r)->end + 1) * sizeof(int));
+    } else {
+        // in this case we just need to move a couple of elements near the
+        // beginning of the list down
+        const size_t n_to_move = (*r)->end - real_idx;
+        memmove((*r)->arr + real_idx, (*r)->arr + real_idx + 1, n_to_move * sizeof(int));
+    }
+    (*r)->end = (*r)->end == 0 ? (*r)->capacity - 1 : (*r)->end - 1;
     (*r)->len--;
     return out;
 }
@@ -88,6 +178,14 @@ int rbi_remove(ring_buffer_int **r, size_t idx) {
 void rbi_print(ring_buffer_int **r) {
     fprintf(stdout, "[ ");
     for (size_t i = 0; i < (*r)->len; i++) {
+        fprintf(stdout, "%d ", (*r)->arr[rbi_idx(r, i)]);
+    }
+    fprintf(stdout, "]\n");
+}
+
+void rbi_print_arr(ring_buffer_int **r) {
+    fprintf(stdout, "[ ");
+    for (size_t i = 0; i < (*r)->capacity; i++) {
         fprintf(stdout, "%d ", (*r)->arr[i]);
     }
     fprintf(stdout, "]\n");
@@ -97,65 +195,48 @@ void rbi_test() {
     // creation
     ring_buffer_int *r = rbi_new(1);
     int foo;
-    // assert(r != NULL);
-    // assert(r->len == 0);
-    // assert(r->capacity == 1);
-    // assert(r->arr != 0);
-    //
-    // // push
-    // rbi_push(&r, 2);
-    // assert(r->len == 1);
-    // assert(r->capacity == 1);
-    // foo = rbi_get(&r, 0);
-    // assert(foo == 2);
-    //
-    // rbi_push(&r, 1);
-    // assert(r->len == 2);
-    // assert(r->capacity == 2);
-    // foo = rbi_get(&r, 0);
-    // assert(foo == 2);
-    // foo = rbi_get(&r, 1);
-    // assert(foo == 1);
-    //
-    // // insert
-    // rbi_insert(&r, 1, 3);
-    // assert(r->len == 3);
-    // assert(r->capacity == 4);
-    // foo = rbi_get(&r, 0);
-    // assert(foo == 2);
-    // foo = rbi_get(&r, 1);
-    // assert(foo == 3);
-    // foo = rbi_get(&r, 2);
-    // assert(foo == 1);
-    //
-    // // set
-    // rbi_set(&r, 2, 4);
-    // assert(r->len == 3);
-    // foo = rbi_get(&r, 0);
-    // assert(foo == 2);
-    // foo = rbi_get(&r, 1);
-    // assert(foo == 3);
-    // foo = rbi_get(&r, 2);
-    // assert(foo == 4);
-    //
-    // // remove
-    // rbi_print(&r);
-    // foo = rbi_remove(&r, 1);
-    // rbi_print(&r);
-    // assert(foo == 3);
-    // assert(r->len == 2);
-    // foo = rbi_get(&r, 0);
-    // assert(foo == 2);
-    // foo = rbi_get(&r, 1);
-    // assert(foo == 4);
-    //
-    // // pop
-    // foo = rbi_pop(&r);
-    // assert(foo == 4);
-    // assert(r->len == 1);
-    // foo = rbi_pop(&r);
-    // assert(foo == 2);
-    // assert(r->len == 0);
+    assert(r != NULL);
+    assert(r->len == 0);
+    assert(r->start == 0);
+    assert(r->end == 0);
+    assert(r->capacity == 1);
+    assert(r->arr != NULL);
+
+    rbi_push_front(&r, 1);
+    foo = rbi_get(&r, 0);
+    assert(foo == 1);
+    assert(r->start == 0);
+    assert(r->end == 0);
+    assert(r->len == 1);
+    assert(r->capacity == 1);
+    rbi_print(&r);
+    rbi_print_arr(&r);
+
+    rbi_pop_front(&r);
+    assert(r->start == 0);
+    assert(r->end == 0);
+    assert(r->len == 0);
+    assert(r->capacity == 1);
+    rbi_print(&r);
+    rbi_print_arr(&r);
+
+    rbi_push_back(&r, 2);
+    foo = rbi_get(&r, 0);
+    assert(foo == 2);
+    assert(r->start == 0);
+    assert(r->end == 0);
+    assert(r->len == 1);
+    assert(r->capacity == 1);
+    rbi_print(&r);
+    rbi_print_arr(&r);
+
+    rbi_pop_front(&r);
+    assert(r->start == 0);
+    assert(r->end == 0);
+    assert(r->len == 0);
+    assert(r->capacity == 1);
+    rbi_print(&r);
+    rbi_print_arr(&r);
 
     rbi_free(r);
     printf("Finished RingBuffer tests!\n");
