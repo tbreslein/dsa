@@ -80,7 +80,7 @@ Language: C
 - [ ] array based data structures
   - [x] array buffer
   - [x] ring buffer
-  - [ ] heap
+  - [x] heap
   - [ ] hashmap
   - [ ] hashset
 - [ ] tree based data structures

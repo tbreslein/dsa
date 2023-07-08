@@ -28,23 +28,23 @@ void qi_free(queue_int *q) {
     return;
 }
 
-void qi_push(queue_int **q, int data) {
-    (*q)->len++;
-    lli_push_front(&(*q)->list, data);
+void qi_push(queue_int *q, int data) {
+    q->len++;
+    lli_push_front(q->list, data);
 }
-int qi_pop(queue_int **q) {
-    (*q)->len--;
-    return lli_pop_back(&(*q)->list);
+int qi_pop(queue_int *q) {
+    q->len--;
+    return lli_pop_back(q->list);
 }
 
-void qi_print(queue_int **q) { lli_print(&(*q)->list); }
+void qi_print(const queue_int *q) { lli_print(q->list); }
 
 int qi_peek(const queue_int *q) {
     assert(q != NULL);
     return lli_peek_back(q->list);
 }
 
-void qi_test() {
+void qi_test(void) {
     // creation
     queue_int *q = qi_new();
     assert(q != NULL);
@@ -55,25 +55,25 @@ void qi_test() {
     assert(q->list->tail == NULL);
 
     // push
-    qi_push(&q, 2);
+    qi_push(q, 2);
     assert(q->len == 1);
     assert(qi_peek(q) == 2);
 
-    qi_push(&q, 1);
+    qi_push(q, 1);
     assert(q->len == 2);
     assert(qi_peek(q) == 2);
 
-    qi_push(&q, 3);
+    qi_push(q, 3);
     assert(q->len == 3);
     assert(qi_peek(q) == 2);
 
     // pop
     int foo;
-    foo = qi_pop(&q);
+    foo = qi_pop(q);
     assert(foo == 2);
-    foo = qi_pop(&q);
+    foo = qi_pop(q);
     assert(foo == 1);
-    foo = qi_pop(&q);
+    foo = qi_pop(q);
     assert(foo == 3);
 
     qi_free(q);

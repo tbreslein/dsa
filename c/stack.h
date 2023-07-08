@@ -28,23 +28,24 @@ void si_free(stack_int *s) {
     return;
 }
 
-void si_push(stack_int **s, int data) {
-    (*s)->len++;
-    lli_push_front(&(*s)->list, data);
-}
-int si_pop(stack_int **s) {
-    (*s)->len--;
-    return lli_pop_front(&(*s)->list);
+void si_push(stack_int *s, int data) {
+    s->len++;
+    lli_push_front(s->list, data);
 }
 
-void si_print(stack_int **s) { lli_print(&(*s)->list); }
+int si_pop(stack_int *s) {
+    s->len--;
+    return lli_pop_front(s->list);
+}
+
+void si_print(const stack_int *s) { lli_print(s->list); }
 
 int si_peek(const stack_int *s) {
     assert(s != NULL);
     return lli_peek_front(s->list);
 }
 
-void si_test() {
+void si_test(void) {
     // creation
     stack_int *s = si_new();
     assert(s != NULL);
@@ -55,25 +56,25 @@ void si_test() {
     assert(s->list->tail == NULL);
 
     // push
-    si_push(&s, 2);
+    si_push(s, 2);
     assert(s->len == 1);
     assert(si_peek(s) == 2);
 
-    si_push(&s, 1);
+    si_push(s, 1);
     assert(s->len == 2);
     assert(si_peek(s) == 1);
 
-    si_push(&s, 3);
+    si_push(s, 3);
     assert(s->len == 3);
     assert(si_peek(s) == 3);
 
     // pop
     int foo;
-    foo = si_pop(&s);
+    foo = si_pop(s);
     assert(foo == 3);
-    foo = si_pop(&s);
+    foo = si_pop(s);
     assert(foo == 1);
-    foo = si_pop(&s);
+    foo = si_pop(s);
     assert(foo == 2);
 
     si_free(s);
