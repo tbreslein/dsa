@@ -44,7 +44,7 @@ Some algos:
 
 Languages I have done this for - at least in parts - or may be doing it for in the future:
 
-- [ ] C
+- [x] C
 - [ ] C++
 - [x] Go
 - [ ] Dart
@@ -55,7 +55,6 @@ Languages I have done this for - at least in parts - or may be doing it for in t
 - [ ] Julia
 - [ ] Kotlin
 - [ ] Lua
-- [ ] Nim
 - [ ] Ocaml
 - [ ] Odin
 - [ ] Python
@@ -123,7 +122,7 @@ Language: C
   - [ ] graph
   - [ ] b-tree
   - [ ] red-black-tree
-- [/] algos
+- [ ] algos
   - [x] breadth first search
   - [x] depth first search
   - [x] inverting a binary tree
@@ -135,6 +134,39 @@ Language: C
   - [ ] n-queens
   - [ ] graph cycle detection
   - [x] Djikstra's shorted path
+
+### OCaml
+
+- [ ] list based data structures
+  - [ ] single linked list
+  - [ ] double linked list
+  - [ ] stack
+  - [ ] queue
+- [ ] array based data structures
+  - [ ] array buffer
+  - [ ] ring buffer
+  - [ ] heap
+  - [ ] hashmap
+  - [ ] hashset
+- [ ] tree based data structures
+  - [ ] binary tree
+  - [ ] binary search tree
+  - [ ] trie
+  - [ ] graph
+  - [ ] b-tree
+  - [ ] red-black-tree
+- [ ] algos
+  - [ ] breadth first search
+  - [ ] depth first search
+  - [ ] inverting a binary tree
+  - [ ] bubble sort
+  - [ ] quick sort
+  - [ ] insertion sort
+  - [ ] merge sort
+  - [ ] huffman coding compression
+  - [ ] n-queens
+  - [ ] graph cycle detection
+  - [ ] Djikstra's shorted path
 
 ## Resources
 
