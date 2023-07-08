@@ -44,7 +44,7 @@ Some algos:
 
 Languages I have done this for - at least in parts - or may be doing it for in the future:
 
-- [/] C
+- [-] C
 - [ ] C++
 - [x] Go
 - [ ] Dart
