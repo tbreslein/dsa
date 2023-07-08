@@ -1,0 +1,3 @@
+(library
+ (public_name ocaml_dsa)
+ (name ocaml_dsa))
