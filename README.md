@@ -44,7 +44,7 @@ Some algos:
 
 Languages I have done this for - at least in parts - or may be doing it for in the future:
 
-- [ ] C
+- [/] C
 - [ ] C++
 - [x] Go
 - [ ] Dart
@@ -79,7 +79,7 @@ Language: C
   - [x] queue
 - [/] array based data structures
   - [x] array buffer
-  - [ ] ring buffer
+  - [x] ring buffer
   - [ ] heap
   - [ ] hashmap
   - [ ] hashset
@@ -110,10 +110,10 @@ Language: C
   - [x] double linked list
   - [x] stack
   - [x] queue
-- [ ] array based data structures
+- [/] array based data structures
   - [ ] array buffer
   - [ ] ring buffer
-  - [ ] heap
+  - [x] heap
   - [ ] hashmap
   - [ ] hashset
 - [/] tree based data structures
