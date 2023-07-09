@@ -138,7 +138,7 @@ Language: C
 ### OCaml
 
 - [ ] list based data structures
-  - [ ] single linked list
+  - [x] single linked list
   - [ ] double linked list
   - [ ] stack
   - [ ] queue
