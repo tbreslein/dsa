@@ -1,2 +1,5 @@
 (test
- (name ocaml_dsa))
+ (name test)
+ (package ocaml_dsa)
+ (libraries ocaml_dsa ounit2)
+ )
