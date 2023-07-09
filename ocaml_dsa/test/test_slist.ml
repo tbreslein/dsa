@@ -9,40 +9,115 @@ let to_string_with_int xs =
   in
   foo "[ " xs ^ "]"
 
-let length_empty ctxt =
-  OUnit2.assert_equal 0 (Slist.length Nil) ~ctxt ~printer:Int.to_string
-
-let length_1 ctxt =
-  OUnit2.assert_equal 1
-    (Slist.length (Node (2, Nil)))
-    ~ctxt ~printer:Int.to_string
-
-let length_2 ctxt =
-  OUnit2.assert_equal 2
-    (Slist.length (Node (2, Node (1, Nil))))
-    ~ctxt ~printer:Int.to_string
+let empty_slist _ctxt = Slist.Nil
+let one_element_slist _ctxt = Slist.Node (1, Nil)
+let two_element_slist _ctxt = Slist.Node (1, Node (2, Nil))
+let three_element_slist _ctxt = Slist.Node (1, Node (2, Node (3, Nil)))
+let teardown _stack _ctxt = ()
 
 let length_suite =
-  "slist length tests"
+  "test_length"
   >::: [
-         "empty list" >:: length_empty;
-         "one element list" >:: length_1;
-         "two elements list" >:: length_2;
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_equal 0 (Slist.length xs) ~printer:Int.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal 1 (Slist.length xs) ~printer:Int.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal 2 (Slist.length xs) ~printer:Int.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_slist teardown ctxt in
+           assert_equal 3 (Slist.length xs) ~printer:Int.to_string );
        ]
 
-let tail_1 ctxt =
-  OUnit2.assert_equal Slist.Nil
-    (Slist.tail (Node (2, Nil)))
-    ~ctxt ~printer:to_string_with_int
-
-let tail_2 ctxt =
-  OUnit2.assert_equal
-    (Slist.Node (1, Nil))
-    (Slist.tail (Node (2, Node (1, Nil))))
-    ~ctxt ~printer:to_string_with_int
+let empty_suite =
+  "test_empty"
+  >::: [
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_equal true (Slist.empty xs) ~printer:Bool.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal false (Slist.empty xs) ~printer:Bool.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal false (Slist.empty xs) ~printer:Bool.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_slist teardown ctxt in
+           assert_equal false (Slist.empty xs) ~printer:Bool.to_string );
+       ]
 
 let tail_suite =
-  "slist tail tests"
-  >::: [ "one element list" >:: tail_1; "two elements list" >:: tail_2 ]
+  "test_tail"
+  >::: [
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_raises Slist.Empty (fun () -> Slist.tail xs) );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal Slist.Nil (Slist.tail xs) ~printer:to_string_with_int );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (2, Nil))
+             (Slist.tail xs) ~printer:to_string_with_int );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (2, Node (3, Nil)))
+             (Slist.tail xs) ~printer:to_string_with_int );
+       ]
 
-let suite = "slist tests" >::: [ length_suite; tail_suite ]
+let drop_suite =
+  "test_drop"
+  >::: [
+         ( "empty list" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_raises Slist.TooLong (fun () -> Slist.drop 2 xs) );
+         ( "drop zero from one element list" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (1, Nil))
+             (Slist.drop 0 xs) ~printer:to_string_with_int );
+         ( "one element from one element list" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal Slist.Nil (Slist.drop 1 xs) ~printer:to_string_with_int
+         );
+         ( "drop zero from two element list" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (1, Node (2, Nil)))
+             (Slist.drop 0 xs) ~printer:to_string_with_int );
+         ( "drop one from two element list" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (2, Nil))
+             (Slist.drop 1 xs) ~printer:to_string_with_int );
+         ( "drop 2 from two element list" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal Slist.Nil (Slist.drop 2 xs) ~printer:to_string_with_int
+         );
+       ]
+
+let head_suite =
+  "test_head"
+  >::: [
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_raises Slist.Empty (fun () -> Slist.tail xs) );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal 1 (Slist.head xs) ~printer:Int.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal 1 (Slist.head xs) ~printer:Int.to_string );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_slist teardown ctxt in
+           assert_equal 1 (Slist.head xs) ~printer:Int.to_string );
+       ]
+
+let suite =
+  "slist tests"
+  >::: [ length_suite; empty_suite; tail_suite; head_suite; drop_suite ]
