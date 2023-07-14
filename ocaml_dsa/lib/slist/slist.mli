@@ -10,3 +10,5 @@ val head : 'e t -> 'e
 val tail : 'e t -> 'e t
 val take : int -> 'e t -> 'e t
 val drop : int -> 'e t -> 'e t
+val push : 'e t -> 'e -> 'e t
+val pop : 'e t -> 'e * 'e t

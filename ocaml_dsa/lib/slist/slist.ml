@@ -30,5 +30,5 @@ let rec drop n xs =
   | _, Node (_, rest) -> drop (n - 1) rest
   | _, Nil -> raise TooLong
 
-let push x xs = Node (x, xs)
+let push xs x = Node (x, xs)
 let pop xs = match xs with Node (x, rest) -> (x, rest) | Nil -> raise Empty

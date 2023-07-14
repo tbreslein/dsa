@@ -118,6 +118,54 @@ let head_suite =
            assert_equal 1 (Slist.head xs) ~printer:Int.to_string );
        ]
 
+let push_suite =
+  "test_push"
+  >::: [
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (10, Nil))
+             (Slist.push xs 10) ~printer:to_string_with_int );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (10, Node (1, Nil)))
+             (Slist.push xs 10) ~printer:to_string_with_int );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (10, Node (1, Node (2, Nil))))
+             (Slist.push xs 10) ~printer:to_string_with_int );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_slist teardown ctxt in
+           assert_equal
+             (Slist.Node (10, Node (1, Node (2, Node (3, Nil)))))
+             (Slist.push xs 10) ~printer:to_string_with_int );
+       ]
+
+let pop_suite =
+  "test_pop"
+  >::: [
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_slist teardown ctxt in
+           assert_raises Slist.Empty (fun () -> Slist.pop xs) );
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_slist teardown ctxt in
+           assert_equal
+             (1, Slist.Nil)
+             (Slist.pop xs));
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_slist teardown ctxt in
+           assert_equal
+             (1, Slist.Node(2, Nil))
+             (Slist.pop xs));
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_slist teardown ctxt in
+           assert_equal
+             (1, Slist.Node(2, Node(3, Nil)))
+             (Slist.pop xs));
+       ]
+
 let suite =
   "slist tests"
-  >::: [ length_suite; empty_suite; tail_suite; head_suite; drop_suite ]
+  >::: [ length_suite; empty_suite; tail_suite; head_suite; drop_suite; push_suite; pop_suite ]
