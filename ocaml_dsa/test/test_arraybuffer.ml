@@ -81,6 +81,23 @@ let pop_suite =
            assert_equal (Some 3) (Arraybuffer.pop xs));
        ]
 
+let set_get_suite =
+  "test_set_get"
+  >::: [
+         ( "empty" >:: fun ctxt ->
+           let xs = bracket empty_buffer teardown ctxt in
+           assert_raises Arraybuffer.OutOfBounds (fun () -> Arraybuffer.set xs 0 1));
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket one_element_buffer teardown ctxt in
+           assert_equal (Some 10) (Arraybuffer.set xs 0 10; Arraybuffer.get xs 0));
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket two_element_buffer teardown ctxt in
+           assert_equal (Some 20) (Arraybuffer.set xs 1 20; Arraybuffer.get xs 1));
+         ( "one element" >:: fun ctxt ->
+           let xs = bracket three_element_buffer teardown ctxt in
+           assert_equal (Some 100) (Arraybuffer.set xs 2 100; Arraybuffer.get xs 2));
+       ]
+
 let suite =
   "arraybuffer tests"
-  >::: [ length_suite; empty_suite; pop_suite ]
+  >::: [ length_suite; empty_suite; pop_suite; set_get_suite ]
