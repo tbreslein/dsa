@@ -3,6 +3,6 @@
 (library
  (public_name ocaml_dsa)
  (name ocaml_dsa)
- (modules arraybuffer slist)
+ (modules arraybuffer ringbuffer slist)
  (preprocess (pps ppx_deriving.show ppx_deriving.eq))
  )

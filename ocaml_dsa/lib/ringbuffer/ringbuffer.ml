@@ -1,4 +1,6 @@
 type 'e t = {
+    mutable start: int;
+    mutable stop: int;
     mutable len: int;
     mutable cap: int;
     mutable buf: 'e option Array.t;
@@ -6,10 +8,11 @@ type 'e t = {
 
 exception Empty
 exception OutOfBounds
+exception TODO
 
 let grow xs = xs.buf <- Array.append xs.buf (Array.make xs.cap None); xs.cap <- max (xs.cap * 2) 1
 
-let create cap = { len = 0; cap = cap; buf = Array.make 1 None; }
+let create cap = { start = 0; stop = 0; len = 0; cap = cap; buf = Array.make 1 None; }
 
 let length xs = xs.len 
 
@@ -29,6 +32,9 @@ let pop xs =
     let out = Array.get xs.buf xs.len in
     Array.set xs.buf xs.len None;
     out
+
+let insert xs i x = raise TODO
+let remove xs i = raise TODO
 
 let set xs i x =
     if i >= xs.len
