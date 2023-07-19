@@ -2,3 +2,4 @@ c/build
 .ccls-cache
 compile_commands.json
 ocaml_dsa/_build
+_opam
